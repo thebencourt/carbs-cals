@@ -1,4 +1,4 @@
-# Carbs & Cals
+# Carbs & Cals
 
 Quickly calculate the total calories and carbohydrates for a portion.
 
