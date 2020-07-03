@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Food Calculator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>Food Calculator</h1>
+    <form id="form" class="Form">
+      <fieldset class="Form__fieldset">
+        <legend class="Form__legend">Portion Information</legend>
+        <div class="Form__row">
+          <div class="Form__field">
+            <label class="Form__label" for="amount">Amount (<abbr title="grams">g</abbr>)</label>
+            <input type="number" id="amount" placeholder="100" />
+          </div>
+        </div>
+      </fieldset>
+      <fieldset class="Form__fieldset">
+        <legend class="Form__legend">Nutritional Information</legend>
+        <div class="Form__row">
+          <div class="Form__field Form__field--sm-2 Form__field--md-3">
+            <label class="Form__label" for="calories">Calories</label>
+            <input type="number" id="calories" placeholder="50" />
+          </div>
+          <div class="Form__field Form__field--sm-2 Form__field--md-3">
+            <label class="Form__label" for="carbs">Carbs (<abbr title="grams">g</abbr>)</label>
+            <input type="number" id="carbs" placeholder="10" />
+          </div>
+          <div class="Form__field Form__field--md-3">
+            <label class="Form__label" for="serving">Serving Size (<abbr title="grams">g</abbr>)</label>
+            <input type="number" id="serving" placeholder="100" />
+          </div>
+        </div>
+      </fieldset>
+      <button class="Form__btn">Calculate</button>
+    </form>
+    <div class="Output">
+      <p class="Output__line"><span class="Output__total" id="calories-output">0</span> calories</p>
+      <p class="Output__line"><span class="Output__total" id="carbs-output">0</span>g carbs</p>
+    </div>
+    <script src="app.js" defer></script>
+  </body>
+</html>
