@@ -3,5 +3,5 @@
   "start_url": ".",
   "display": "standalone",
   "background_color": "#131217",
-  "description": "Calculator for calories and carbohydrates."
+  "description": "Quickly calculate the total calories and carbohydrates for a portion."
 }
