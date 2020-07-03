@@ -28,8 +28,6 @@ function init() {
     const totalCals = caloriesPerGram * a;
     const totalCarbs = carbsPerGram * a;
 
-    console.info({ caloriesPerGram, carbsPerGram, totalCals, totalCarbs });
-
     caloriesOutput.textContent = totalCals;
     carbsOutput.textContent = totalCarbs;
   }
