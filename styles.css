@@ -3,6 +3,7 @@
 *::after {
   box-sizing: border-box;
   margin: 0;
+  padding: 0;
 }
 
 :root {
@@ -11,6 +12,10 @@
   --text: rgba(255, 255, 255, 0.8);
 
   --radius: 4px;
+
+  --settings-btn-inset: 1rem;
+  --settings-btn-size: 2.5rem;
+  --settings-icon-size: 1.5rem;
 }
 
 html,
@@ -28,6 +33,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   justify-content: center;
   padding: 1rem;
+  position: relative;
 }
 
 h1 {
@@ -61,13 +67,44 @@ input:focus {
 }
 
 button {
+  background-color: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+
+.Settings {
+  height: var(--settings-btn-size);
+  position: absolute;
+  right: var(--settings-btn-inset);
+  top: var(--settings-btn-inset);
+  width: var(--settings-btn-size);
+}
+
+.Settings:focus,
+.Settings:hover {
+  color: var(--primary);
+}
+
+.Settings__icon {
+  height: var(--settings-icon-size);
+  width: var(--settings-icon-size);
+  transform: none;
+  transition: all ease-in-out .75s;
+  will-change: transform;
+}
+
+.Settings:focus .Settings__icon,
+.Settings:hover .Settings__icon {
+  transform: rotate(360deg);
+}
+
+.Btn {
   background-color: var(--primary);
   border: 1px solid var(--primary);
   border-radius: var(--radius);
-  color: var(--text);
-  cursor: pointer;
   display: block;
-  font: inherit;
   padding: 1rem;
 }
 
