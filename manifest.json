@@ -1,6 +1,5 @@
 {
   "name": "Carbs & Cals",
-  "short_name": "CarbsCals",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#131217",
