@@ -56,6 +56,11 @@ input[type="number"] {
   width: 100%;
 }
 
+::placeholder {
+  color: var(--text);
+  opacity: 0.25;
+}
+
 input:focus {
   border-color: var(--primary);
 }
@@ -128,7 +133,30 @@ button {
   width: 100%;
 }
 
+.Output__line {
+  text-align: center;
+}
+
 .Output__total {
   color: var(--primary);
+  display: block;
   font-size: 2rem;
+}
+
+.Output__total--carbs::after {
+  content: 'g';
+  color: var(--text);
+  display: inline-block;
+  font-size: 1.5rem;
+  margin-left: 0.25ch;
+}
+
+@media (min-width: 767px) {
+  .Output__line {
+    text-align: left;
+  }
+
+  .Output__total {
+    display: inline;
+  }
 }

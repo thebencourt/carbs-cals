@@ -28,8 +28,8 @@ function init() {
     const totalCals = caloriesPerGram * a;
     const totalCarbs = carbsPerGram * a;
 
-    caloriesOutput.textContent = totalCals;
-    carbsOutput.textContent = totalCarbs;
+    caloriesOutput.textContent = totalCals.toFixed(2);
+    carbsOutput.textContent = totalCarbs.toFixed(2);
   }
 
   form.addEventListener('submit', calculate);
