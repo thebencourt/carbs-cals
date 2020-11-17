@@ -16,7 +16,9 @@
         <div class="Form__row">
           <div class="Form__field">
             <label class="Form__label" for="amount">Amount (<abbr title="grams">g</abbr>)</label>
-            <input type="number" id="amount" placeholder="100" />
+            <div class="Form__inputWrapper">
+              <input type="number" id="amount" placeholder="100" min="0" step="0.1" />
+            </div>
           </div>
         </div>
       </fieldset>
@@ -25,15 +27,21 @@
         <div class="Form__row">
           <div class="Form__field Form__field--sm-2 Form__field--md-3">
             <label class="Form__label" for="calories">Calories</label>
-            <input type="number" id="calories" placeholder="50" />
+            <div class="Form__inputWrapper">
+              <input type="number" id="calories" placeholder="50" min="0" step="0.1" />
+            </div>
           </div>
           <div class="Form__field Form__field--sm-2 Form__field--md-3">
             <label class="Form__label" for="carbs">Carbs (<abbr title="grams">g</abbr>)</label>
-            <input type="number" id="carbs" placeholder="10" />
+            <div class="Form__inputWrapper">
+              <input type="number" id="carbs" placeholder="10" min="0" step="0.1" />
+            </div>
           </div>
           <div class="Form__field Form__field--md-3">
             <label class="Form__label" for="serving">Serving Size (<abbr title="grams">g</abbr>)</label>
-            <input type="number" id="serving" placeholder="100" />
+            <div class="Form__inputWrapper">
+              <input type="number" id="serving" placeholder="100" min="0" step="0.1" />
+            </div>
           </div>
         </div>
       </fieldset>

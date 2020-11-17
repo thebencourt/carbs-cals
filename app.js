@@ -10,26 +10,39 @@ function init() {
   function calculate(ev) {
     ev.preventDefault();
 
-    if (!amount.value || (!calories.value || !carbs.value) || !serving.value) {
+    if (!amount.value || (!calories.value && !carbs.value) || !serving.value) {
       return;
     }
 
-    const a = parseFloat(amount.value);
-    const cal = parseFloat(calories.value);
-    const car = parseFloat(carbs.value);
-    const s = parseFloat(serving.value);
+    const amountVal = parseFloat(amount.value);
+    const caloriesVal = parseFloat(calories.value) || 0;
+    const carbsVal = parseFloat(carbs.value) || 0;
+    const servingVal = parseFloat(serving.value);
 
-    if (Number.isNaN(a) || Number.isNaN(cal) || Number.isNaN(car) || Number.isNaN(s)) {
+    if (
+      Number.isNaN(amountVal) ||
+      Number.isNaN(caloriesVal) ||
+      Number.isNaN(carbsVal) ||
+      Number.isNaN(servingVal)
+    ) {
       return;
     }
 
-    const caloriesPerGram = cal / s;
-    const carbsPerGram = car / s;
-    const totalCals = caloriesPerGram * a;
-    const totalCarbs = carbsPerGram * a;
+    const caloriesPerGram = caloriesVal / servingVal;
+    const carbsPerGram = carbsVal / servingVal;
+    const totalCals = caloriesPerGram * amountVal;
+    const totalCarbs = carbsPerGram * amountVal;
 
-    caloriesOutput.textContent = totalCals.toFixed(2);
-    carbsOutput.textContent = totalCarbs.toFixed(2);
+    const fixedCalories = totalCals.toFixed(2);
+    const fixedCarbs = totalCarbs.toFixed(2);
+
+    caloriesOutput.textContent = fixedCalories.split('.')[1] === '00'
+      ? fixedCalories.split('.')[0]
+      : fixedCalories;
+
+    carbsOutput.textContent = fixedCarbs.split('.')[1] === '00'
+      ? fixedCarbs.split('.')[0]
+      : fixedCarbs;
   }
 
   form.addEventListener('submit', calculate);

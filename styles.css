@@ -8,6 +8,7 @@
 :root {
   --bg: rgb(19, 18, 23);
   --primary: rgb(177, 122, 204);
+  --secondary: rgb(208, 244, 141);
   --text: rgba(255, 255, 255, 0.8);
 
   --radius: 4px;
@@ -44,6 +45,8 @@ input[type="radio"] + label {
   vertical-align: middle;
 }
 
+.Form__inputWrapper { position: relative; }
+
 input[type="text"],
 input[type="number"] {
   background-color: rgba(255, 255, 255, 0.2);
@@ -52,6 +55,7 @@ input[type="number"] {
   color: var(--text);
   display: block;
   font: inherit;
+  outline: 0;
   padding: 1rem;
   width: 100%;
 }
@@ -61,20 +65,34 @@ input[type="number"] {
   opacity: 0.25;
 }
 
-input:focus {
-  border-color: var(--primary);
-}
-
 button {
   background-color: var(--primary);
   border: 1px solid var(--primary);
   border-radius: var(--radius);
   color: var(--text);
-  cursor: pointer;
   display: block;
   font: inherit;
+  outline: 0;
   padding: 1rem;
+  position: relative;
 }
+
+button::before,
+.Form__inputWrapper::before {
+  border: 2px solid var(--secondary);
+  border-radius: calc(var(--radius) * 2);
+  bottom: -5px;
+  content: '';
+  left: -5px;
+  opacity: 0;
+  position: absolute;
+  right: -5px;
+  transition: opacity ease 0.2s;
+  top: -5px;
+}
+
+button:focus::before,
+.Form__inputWrapper:focus-within::before { opacity: 1; }
 
 .Form__fieldset {
   border: 1px solid var(--primary);
