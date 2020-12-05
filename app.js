@@ -1,3 +1,7 @@
+/**
+ * init
+ * Setup 
+ */
 function init() {
   // Form/buttons
   const form = document.getElementById('form');
@@ -23,11 +27,11 @@ function init() {
 
   // Sidebar
   const sidebar = document.getElementById('sidebar');
-
+  const list = document.getElementById('savedList');
 
   /**
    * calculate
-   * @param {ev} Event
+   * @param {ev} Event The form submit event
    * Basic validation and calculate values
    */
   function calculate(ev) {
@@ -96,15 +100,17 @@ function init() {
    * Saves the entry to localStorage
    */
   function save() {
+    const savedItems = localStorage.getItem('saved');
+    const parsed = savedItems ? JSON.parse(savedItems) : [];
+
     const data = {
+      id: parsed.length,
       name: name.value.trim(),
       amount: amount.value,
       calories: caloriesOutput.textContent,
       carbs: carbsOutput.textContent,
     };
 
-    const savedItems = localStorage.getItem('saved');
-    const parsed = savedItems ? JSON.parse(savedItems) : [];
     const updated = [
       ...parsed,
       data,
@@ -121,11 +127,16 @@ function init() {
     carbsOutput.textContent = '0';
 
     toggleButtons();
+
+    listBtn.removeAttribute('hidden');
+    
+    setupList();
   }
 
 
   /**
    * toggleButtons
+   * Switches between calculate and save buttons
    */
   function toggleButtons() {
     if (calculateBtn.hasAttribute('hidden')) {
@@ -151,7 +162,6 @@ function init() {
    * setupList
    */
   function setupList() {
-    const list = document.getElementById('savedList');
     const items = localStorage.getItem('saved');
     const parsed = JSON.parse(items);
     const frag = document.createDocumentFragment();
@@ -160,23 +170,34 @@ function init() {
       const li = document.createElement('li');
       li.className = 'Sidebar__listItem';
       li.innerHTML = `
-        <h3>${p.name}</h3>
-        <span>
-          <strong>Amount:</strong> ${p.amount}
-        </span>
-        <br />
-        <span>
-          <strong>Calories:</strong> ${p.calories}
-        </span>
-        <br />
-        <span>
-          <strong>Carbs:</strong> ${p.carbs}
-        </span>
+        <span class="Sidebar__listItemName">${p.name}</span>
+        <button class="Sidebar__listItemBtn" data-id="${p.id}" type="button">X</button>
       `;
       frag.appendChild(li);
     });
 
+    list.innerHTML = '';
     list.appendChild(frag);
+  }
+
+
+  /**
+   * removeSavedItem
+   * @param {Event} ev Click event
+   */
+  function removeSavedItem(ev) {
+    const item = ev.target;
+    const { dataset: { id } } = item;
+    const saved = localStorage.getItem('saved');
+    const parsed = JSON.parse(saved);
+    const updated = parsed.splice(1, id);
+
+    localStorage.setItem('saved', JSON.stringify(updated));
+    setupList();
+
+    if (!updated.length) {
+      listBtn.setAttribute('hidden', '');
+    }
   }
 
 
@@ -189,6 +210,7 @@ function init() {
 
   // Add event listeners
   listBtn.addEventListener('click', toggleList);
+  list.addEventListener('click', removeSavedItem);
   form.addEventListener('submit', calculate);
   saveBtn.addEventListener('click', openModal);
   saveEntryBtn.addEventListener('click', save);
