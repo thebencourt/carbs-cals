@@ -104,7 +104,7 @@ function init() {
     const parsed = savedItems ? JSON.parse(savedItems) : [];
 
     const data = {
-      id: parsed.length,
+      id: name.value.trim().replace(' ', '_'),
       name: name.value.trim(),
       amount: amount.value,
       calories: caloriesOutput.textContent,
@@ -190,7 +190,7 @@ function init() {
     const { dataset: { id } } = item;
     const saved = localStorage.getItem('saved');
     const parsed = JSON.parse(saved);
-    const updated = parsed.splice(1, id);
+    const updated = parsed.filter(x => x.id !== id);
 
     localStorage.setItem('saved', JSON.stringify(updated));
     setupList();
