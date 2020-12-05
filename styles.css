@@ -163,9 +163,7 @@ button:focus::before,
   padding-bottom: 1rem;
 }
 
-.Sidebar__listItemName {}
-
-.Sidebar__listItem .Sidebar__listItemBtn  {
+.Sidebar__listItem .Sidebar__listItemBtn {
   align-items: center;
   cursor: pointer;
   display: flex;
@@ -173,6 +171,13 @@ button:focus::before,
   justify-content: center;
   padding: 0;
   width: 1.5rem;
+}
+
+.Sidebar__listItem .Sidebar__listItemBtn--name {
+  background-color: transparent;
+  border: none;
+  flex: 1;
+  justify-content: flex-start;
 }
 
 /* FORM */

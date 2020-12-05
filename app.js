@@ -35,7 +35,9 @@ function init() {
    * Basic validation and calculate values
    */
   function calculate(ev) {
-    ev.preventDefault();
+    if (ev) {
+      ev.preventDefault();
+    }
 
     // Check we have required values
     if (!amount.value || (!calories.value && !carbs.value) || !serving.value) {
@@ -109,6 +111,7 @@ function init() {
       amount: amount.value,
       calories: caloriesOutput.textContent,
       carbs: carbsOutput.textContent,
+      serving: serving.value,
     };
 
     const updated = [
@@ -122,6 +125,7 @@ function init() {
     calories.value = '';
     carbs.value = '';
     serving.value = '';
+    name.value = '';
 
     caloriesOutput.textContent = '0';
     carbsOutput.textContent = '0';
@@ -170,8 +174,22 @@ function init() {
       const li = document.createElement('li');
       li.className = 'Sidebar__listItem';
       li.innerHTML = `
-        <span class="Sidebar__listItemName">${p.name}</span>
-        <button class="Sidebar__listItemBtn" data-id="${p.id}" type="button">X</button>
+        <button
+          class="Sidebar__listItemBtn Sidebar__listItemBtn--name"
+          data-action="show"
+          data-id="${p.id}"
+          type="button"
+        >
+          ${p.name}
+        </button>
+        <button
+          class="Sidebar__listItemBtn Sidebar__listItemBtn--remove"
+          data-action="remove"
+          data-id="${p.id}"
+          type="button"
+        >
+          X
+        </button>
       `;
       frag.appendChild(li);
     });
@@ -182,12 +200,47 @@ function init() {
 
 
   /**
-   * removeSavedItem
+   * 
    * @param {Event} ev Click event
    */
-  function removeSavedItem(ev) {
+  function handleSavedItemClick(ev) {
     const item = ev.target;
-    const { dataset: { id } } = item;
+    const { dataset: { action, id } } = item;
+
+    if (action === 'show') {
+      showSavedItem(id);
+    }
+
+    if (action === 'remove') {
+      removeSavedItem(id);
+    }
+  }
+
+
+  /**
+   * showSavedItem
+   * @param {string} id ID of item to show
+   */
+  function showSavedItem(id) {
+    const saved = localStorage.getItem('saved');
+    const parsed = JSON.parse(saved);
+    const selected = parsed.find(x => x.id === id);
+
+    amount.value = selected.amount;
+    calories.value = selected.calories;
+    carbs.value = selected.carbs;
+    serving.value = selected.serving;
+
+    calculate();
+    toggleList();
+  }
+
+
+  /**
+   * removeSavedItem
+   * @param {string} id ID of item to remove
+   */
+  function removeSavedItem(id) {
     const saved = localStorage.getItem('saved');
     const parsed = JSON.parse(saved);
     const updated = parsed.filter(x => x.id !== id);
@@ -197,6 +250,7 @@ function init() {
 
     if (!updated.length) {
       listBtn.setAttribute('hidden', '');
+      toggleList();
     }
   }
 
@@ -210,7 +264,7 @@ function init() {
 
   // Add event listeners
   listBtn.addEventListener('click', toggleList);
-  list.addEventListener('click', removeSavedItem);
+  list.addEventListener('click', handleSavedItemClick);
   form.addEventListener('submit', calculate);
   saveBtn.addEventListener('click', openModal);
   saveEntryBtn.addEventListener('click', save);
