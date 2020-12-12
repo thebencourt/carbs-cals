@@ -1,55 +1,84 @@
-/**
- * init
- * Setup 
- */
-function init() {
-  // Form/buttons
-  const form = document.getElementById('form');
-  const calculateBtn = document.getElementById('calculate');
-  const saveBtn = document.getElementById('save');
-  const saveEntryBtn = document.getElementById('saveEntry');
-  const listBtn = document.getElementById('listBtn');
+class CarbCalculator {
+  constructor() {
+    // Form/buttons
+    this.form = document.getElementById('form');
+    this.calculateBtn = document.getElementById('calculate');
+    this.saveBtn = document.getElementById('save');
+    this.saveEntryBtn = document.getElementById('saveEntry');
+    this.listBtn = document.getElementById('listBtn');
 
-  // Inputs
-  const numberInputs = document.querySelectorAll('input[type="number"]');
-  const amount = document.getElementById('amount');
-  const calories = document.getElementById('calories');
-  const carbs = document.getElementById('carbs');
-  const serving = document.getElementById('serving');
-  const name = document.getElementById('name');
+    // Inputs
+    this.numberInputs = document.querySelectorAll('input[type="number"]');
+    this.amount = document.getElementById('amount');
+    this.calories = document.getElementById('calories');
+    this.carbs = document.getElementById('carbs');
+    this.serving = document.getElementById('serving');
+    this.name = document.getElementById('name');
 
-  // Outputs
-  const caloriesOutput = document.getElementById('calories-output');
-  const carbsOutput = document.getElementById('carbs-output');
+    // Outputs
+    this.caloriesOutput = document.getElementById('calories-output');
+    this.carbsOutput = document.getElementById('carbs-output');
 
-  // Modal
-  const modal = document.getElementById('modal');
+    // Modal
+    this.modal = document.getElementById('modal');
 
-  // Sidebar
-  const sidebar = document.getElementById('sidebar');
-  const list = document.getElementById('savedList');
+    // Sidebar
+    this.sidebar = document.getElementById('sidebar');
+    this.list = document.getElementById('savedList');
+
+    // Bind
+    this.init = this.init.bind(this);
+    this.setupList = this.setupList.bind(this);
+    this.toggleList = this.toggleList.bind(this);
+    this.handleSavedItemClick = this.handleSavedItemClick.bind(this);
+    this.calculate = this.calculate.bind(this);
+    this.openModal = this.openModal.bind(this);
+    this.save = this.save.bind(this);
+    this.toggleButtons = this.toggleButtons.bind(this);
+    this.showSavedItem = this.showSavedItem.bind(this);
+    this.removeSavedItem = this.removeSavedItem.bind(this);
+
+    // Go!
+    this.init();
+  }
+
+  init() {
+    if (localStorage.getItem('saved')) {
+      this.listBtn.removeAttribute('hidden');
+      
+      this.setupList();
+    }
+  
+  
+    // Add event listeners
+    this.listBtn.addEventListener('click', this.toggleList);
+    this.list.addEventListener('click', this.handleSavedItemClick);
+    this.form.addEventListener('submit', this.calculate);
+    this.saveBtn.addEventListener('click', this.openModal);
+    this.saveEntryBtn.addEventListener('click', this.save);
+    this.numberInputs.forEach(i => i.addEventListener('input', this.toggleButtons));
+  }
 
   /**
-   * calculate
-   * @param {ev} Event The form submit event
    * Basic validation and calculate values
+   * @param {ev} Event The form submit event
    */
-  function calculate(ev) {
+  calculate(ev) {
     if (ev) {
       ev.preventDefault();
     }
 
     // Check we have required values
-    if (!amount.value || (!calories.value && !carbs.value) || !serving.value) {
+    if (!this.amount.value || (!this.calories.value && !this.carbs.value) || !this.serving.value) {
       // @TODO: Add validation about missing fields
       return;
     }
 
     // Get values, default any optional ones to 0
-    const amountVal = parseFloat(amount.value);
-    const caloriesVal = parseFloat(calories.value) || 0;
-    const carbsVal = parseFloat(carbs.value) || 0;
-    const servingVal = parseFloat(serving.value);
+    const amountVal = parseFloat(this.amount.value);
+    const caloriesVal = parseFloat(this.calories.value) || 0;
+    const carbsVal = parseFloat(this.carbs.value) || 0;
+    const servingVal = parseFloat(this.serving.value);
 
     // Check values entered are valid
     if (
@@ -72,46 +101,42 @@ function init() {
     const fixedCarbs = totalCarbs.toFixed(2);
 
     // If decimcals are 00 then remove
-    caloriesOutput.textContent = fixedCalories.split('.')[1] === '00'
+    this.caloriesOutput.textContent = fixedCalories.split('.')[1] === '00'
       ? fixedCalories.split('.')[0]
       : fixedCalories;
 
-    carbsOutput.textContent = fixedCarbs.split('.')[1] === '00'
+      this.carbsOutput.textContent = fixedCarbs.split('.')[1] === '00'
       ? fixedCarbs.split('.')[0]
       : fixedCarbs;
 
     // Toggle the buttons
-    calculateBtn.setAttribute('hidden', '');
-    saveBtn.removeAttribute('hidden');
-    saveBtn.focus();
+    this.calculateBtn.setAttribute('hidden', '');
+    this.saveBtn.removeAttribute('hidden');
+    this.saveBtn.focus();
   }
 
-
   /**
-   * openModal
    * Opens the save entry modal
    */
-  function openModal() {
-    modal.classList.add('modal--active');
-    requestAnimationFrame(() => name.focus());
+  openModal() {
+    this.modal.classList.add('modal--active');
+    requestAnimationFrame(() => this.name.focus());
   }
 
-
   /**
-   * save
    * Saves the entry to localStorage
    */
-  function save() {
+  save() {
     const savedItems = localStorage.getItem('saved');
     const parsed = savedItems ? JSON.parse(savedItems) : [];
 
     const data = {
-      id: name.value.trim().replace(' ', '_'),
-      name: name.value.trim(),
-      amount: amount.value,
-      calories: caloriesOutput.textContent,
-      carbs: carbsOutput.textContent,
-      serving: serving.value,
+      id: this.name.value.trim().replace(' ', '_'),
+      name: this.name.value.trim(),
+      amount: this.amount.value,
+      calories: this.caloriesOutput.textContent,
+      carbs: this.carbsOutput.textContent,
+      serving: this.serving.value,
     };
 
     const updated = [
@@ -121,35 +146,33 @@ function init() {
 
     localStorage.setItem('saved', JSON.stringify(updated));
 
-    amount.value = '';
-    calories.value = '';
-    carbs.value = '';
-    serving.value = '';
-    name.value = '';
+    this.amount.value = '';
+    this.calories.value = '';
+    this.carbs.value = '';
+    this.serving.value = '';
+    this.name.value = '';
 
-    caloriesOutput.textContent = '0';
-    carbsOutput.textContent = '0';
+    this.caloriesOutput.textContent = '0';
+    this.carbsOutput.textContent = '0';
 
-    toggleButtons();
+    this.toggleButtons();
 
-    listBtn.removeAttribute('hidden');
+    this.listBtn.removeAttribute('hidden');
     
-    setupList();
+    this.setupList();
   }
 
-
   /**
-   * toggleButtons
    * Switches between calculate and save buttons
    */
-  function toggleButtons() {
-    if (calculateBtn.hasAttribute('hidden')) {
-      saveBtn.setAttribute('hidden', '');
-      calculateBtn.removeAttribute('hidden');
+  toggleButtons() {
+    if (this.calculateBtn.hasAttribute('hidden')) {
+      this.saveBtn.setAttribute('hidden', '');
+      this.calculateBtn.removeAttribute('hidden');
     }
 
-    if (modal.classList.contains('modal--active')) {
-      modal.classList.remove('modal--active');
+    if (this.modal.classList.contains('modal--active')) {
+      this.modal.classList.remove('modal--active');
     }
   }
 
@@ -157,15 +180,14 @@ function init() {
   /**
    * toggleList
    */
-  function toggleList() {
-    sidebar.classList.toggle('Sidebar--active');
+  toggleList() {
+    this.sidebar.classList.toggle('Sidebar--active');
   }
-
 
   /**
    * setupList
    */
-  function setupList() {
+  setupList() {
     const items = localStorage.getItem('saved');
     const parsed = JSON.parse(items);
     const frag = document.createDocumentFragment();
@@ -194,83 +216,59 @@ function init() {
       frag.appendChild(li);
     });
 
-    list.innerHTML = '';
-    list.appendChild(frag);
+    this.list.innerHTML = '';
+    this.list.appendChild(frag);
   }
 
-
   /**
-   * 
    * @param {Event} ev Click event
    */
-  function handleSavedItemClick(ev) {
+  handleSavedItemClick(ev) {
     const item = ev.target;
     const { dataset: { action, id } } = item;
 
     if (action === 'show') {
-      showSavedItem(id);
+      this.showSavedItem(id);
     }
 
     if (action === 'remove') {
-      removeSavedItem(id);
+      this.removeSavedItem(id);
     }
   }
 
-
   /**
-   * showSavedItem
    * @param {string} id ID of item to show
    */
-  function showSavedItem(id) {
+  showSavedItem(id) {
     const saved = localStorage.getItem('saved');
     const parsed = JSON.parse(saved);
     const selected = parsed.find(x => x.id === id);
 
-    amount.value = selected.amount;
-    calories.value = selected.calories;
-    carbs.value = selected.carbs;
-    serving.value = selected.serving;
+    this.amount.value = selected.amount;
+    this.calories.value = selected.calories;
+    this.carbs.value = selected.carbs;
+    this.serving.value = selected.serving;
 
-    calculate();
-    toggleList();
+    this.calculate();
+    this.toggleList();
   }
 
-
   /**
-   * removeSavedItem
    * @param {string} id ID of item to remove
    */
-  function removeSavedItem(id) {
+  removeSavedItem(id) {
     const saved = localStorage.getItem('saved');
     const parsed = JSON.parse(saved);
     const updated = parsed.filter(x => x.id !== id);
 
     localStorage.setItem('saved', JSON.stringify(updated));
-    setupList();
+    this.setupList();
 
     if (!updated.length) {
-      listBtn.setAttribute('hidden', '');
-      toggleList();
+      this.listBtn.setAttribute('hidden', '');
+      this.toggleList();
     }
   }
-
-
-  if (localStorage.getItem('saved')) {
-    listBtn.removeAttribute('hidden');
-    
-    setupList();
-  }
-
-
-  // Add event listeners
-  listBtn.addEventListener('click', toggleList);
-  list.addEventListener('click', handleSavedItemClick);
-  form.addEventListener('submit', calculate);
-  saveBtn.addEventListener('click', openModal);
-  saveEntryBtn.addEventListener('click', save);
-  numberInputs.forEach(i => i.addEventListener('input', toggleButtons));
 }
 
-
-// GO!
-document.addEventListener('DOMContentLoaded', init);
+new CarbCalculator();
