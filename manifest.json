@@ -3,5 +3,16 @@
   "start_url": ".",
   "display": "standalone",
   "background_color": "#131217",
-  "description": "Quickly calculate the total calories and carbohydrates for a portion."
+  "description": "Quickly calculate the total calories and carbohydrates for a portion.",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "72x72 96x96 128x128 256x256"
+    }
+  ]
 }
